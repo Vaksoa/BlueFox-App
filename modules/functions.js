@@ -16,4 +16,8 @@ module.exports = (client) => {
         console.log(`${time} [LOG] ${msg}`);
     };
 
+    client.heartbeat = () => {
+        setInterval()
+    }
+
 }

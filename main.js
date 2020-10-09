@@ -1,12 +1,12 @@
-// Do not change
-let version = "v1.0.1";
-
 // Dependencies
 const electron = require('electron');
 const { app, BrowserWindow } = require('electron');
 const client = require('discord-rich-presence')("750914713977749556");
 
-let url = "https://panel.bluefoxhost.com/";
+// Load version from package.json
+const { version } = require("./package.json");
+
+let url = "https://panel.bluefoxhost.com";
 let date = new Date();
 let win;
 
@@ -16,8 +16,8 @@ require('./modules/functions.js')(client);
 app.on('ready', async () => {
 
     win = new BrowserWindow({
-        title: `BlueFox Starting... ${version}`,
-        icon: "./Icon/bluefox.ico",
+        title: `BlueFox App Starting... (v${version})`,
+        icon: "./images/icon/bluefox.ico",
         center: true,
         resizable: true,
         width: 1200,
@@ -25,20 +25,11 @@ app.on('ready', async () => {
         webPreferences: {
             nodeIntegration: false,
             show: false
-        },
-        titleBarStyle: "hidden"
+        }
     });
 
     win.removeMenu();
     await win.loadURL(url);
-
-    await client.updatePresence({
-        state: "BlueFox Panel",
-        details: "Just Started",
-        startTimestamp: date,
-        largeImageKey: "bluefox",
-        largeImageText: "BlueFoxHost.com",
-    });
 
     win.webContents.on("devtools-opened", () => {
         win.webContents.closeDevTools();
@@ -48,7 +39,7 @@ app.on('ready', async () => {
     win.webContents.on('did-finish-load', () => {
         win.webContents.insertCSS(`
             ::-webkit-scrollbar {
-                width: 15px;
+                width: 30px;
             }
 
             ::-webkit-scrollbar-track {
@@ -76,11 +67,13 @@ app.on('ready', async () => {
     win.on('page-title-updated', async () => {
         console.log(win.webContents.get)
         await client.updatePresence({
-            state: "Page: " + win.webContents.getTitle().split(" - ")[1].replace("Viewing Server", ""),
-            details: "Site: " + win.webContents.getTitle().split(" - ")[0],
+            state: win.webContents.getTitle().split(" - ")[1].replace("Viewing Server", ""),
+            details: win.webContents.getTitle().split(" - ")[0],
             startTimestamp: date,
             largeImageKey: "bluefox",
-            largeImageText: "BlueFoxHost.com"
+            largeImageText: "BlueFoxHost.com",
+            smallImageKey: "info",
+            smallImageText: `v${version}`
         });
     })
 
@@ -90,18 +83,29 @@ app.on('ready', async () => {
             details: "Site: " + win.webContents.getTitle().split(" - ")[0],
             startTimestamp: date,
             largeImageKey: "bluefox",
-            largeImageText: "BlueFoxHost.com"
+            largeImageText: "BlueFoxHost.com",
+            smallImageKey: "info",
+            smallImageText: `v${version}`
         });
     });
 
     app.on('browser-window-blur', async () => {
-        await client.updatePresence({
-            details: "Idle",
-            startTimestamp: new Date(),
-            largeImageKey: "idle",
-            largeImageText: "BlueFoxHost.com"
-        });
-        date = new Date();
+        setTimeout(function() {
+            if (win.isFocused()) return;
+            client.updatePresence({
+                details: "Idle",
+                startTimestamp: new Date(),
+                largeImageKey: "idle",
+                largeImageText: "BlueFoxHost.com",
+                smallImageKey: "info",
+                smallImageText: `v${version}`
+            });
+            date = new Date();
+        }, 30000)
     });
+
+    app.on('window-all-closed', function () {
+        if (process.platform !== 'darwin') app.quit()
+    })
 
 });

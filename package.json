@@ -1,6 +1,6 @@
 {
-	"name": "Bluefox",
-	"version": "1.0.0",
+	"name": "BlueFoxApp",
+	"version": "1.0.1",
 	"description": "Bluefox App",
 	"main": "main.js",
 	"scripts": {
@@ -22,5 +22,8 @@
 		"node-notifier": "^8.0.0",
 		"web-remote-control": "^1.9.8",
 		"webhook-discord": "^3.7.5"
+	},
+	"devDependencies": {
+		"electron-packager": "^15.1.0"
 	}
 }
