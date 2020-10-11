@@ -33,10 +33,10 @@ app.on('ready', async () => {
     });
 
     loading = new BrowserWindow({
-        title: `BlueFox App Starting... (v${version})`,
         icon: "./images/icon/bluefox.ico",
         center: true,
         resizable: true,
+        frame: false,
         width: 1500,
         height: 900,
         minWidth: 1050,
@@ -45,7 +45,6 @@ app.on('ready', async () => {
             nodeIntegration: false,
             show: false
         },
-        alwaysOnTop: true
     });
 
     win.removeMenu();
@@ -94,7 +93,11 @@ app.on('ready', async () => {
         win.show();
     });
 
-    win.on('closed',() => {
+    loading.on('closed', () => {
+        loading = null;
+    })
+
+    win.on('closed', () => {
         win = null;
     });
 

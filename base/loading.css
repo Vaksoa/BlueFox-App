@@ -5,8 +5,7 @@ html,body{
     background: #1e1d37;
     overflow: hidden;
   }
-  label{
-    position: relative;
+  h1{
     height: 125px;
     width: 125px;
     display: inline-block;
