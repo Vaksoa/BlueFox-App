@@ -1,6 +1,5 @@
 // Dependencies
 const electron = require('electron');
-const EventEmitter = require('events')
 const { app, BrowserWindow } = require('electron');
 const client = require('discord-rich-presence')("750914713977749556");
 
